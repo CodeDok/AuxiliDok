@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "974802725117",
+    "firebase_url": "https://auxilidok.firebaseio.com",
+    "project_id": "auxilidok",
+    "storage_bucket": "auxilidok.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:974802725117:android:611ced8c2932280e97b694",
+        "android_client_info": {
+          "package_name": "com.codedok.auxilidok"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "974802725117-jd72fvabqa8fcdvjp25omvk8o3gaqnn1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMtVaLOvl1ITyz2mYsVOE4zleEnEsF1Qg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "974802725117-jd72fvabqa8fcdvjp25omvk8o3gaqnn1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
