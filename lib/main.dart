@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 
@@ -13,16 +14,15 @@ void main() {
   runApp(MyApp());
 }
 
+
+
 class MyApp extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Compound',
-      // builder: (context, child) => Navigator(
-      //   key: locator<DialogService>().dialogNavigationKey,
-      //   onGenerateRoute: (settings) => MaterialPageRoute(
-      //       builder: (context) => DialogManager(child: child)),
-      // ),
+      title: 'AuxiliDok',
+      debugShowCheckedModeBanner: false,
       navigatorKey: locator<NavigationService>().navigationKey,
       theme: ThemeData(
         primaryColor: Color.fromARGB(255, 9, 202, 172),
@@ -30,7 +30,24 @@ class MyApp extends StatelessWidget {
         textTheme: Theme.of(context).textTheme.apply(
             ),
       ),
-      home: StartUpView(),
+      home: FutureBuilder(
+        // Initialize FlutterFire
+        future: Firebase.initializeApp(),
+        builder: (context, snapshot) {
+          // Check for errors
+          if (snapshot.hasError) {
+            return Text('Test');
+          }
+
+          // Once complete, show your application
+          if (snapshot.connectionState == ConnectionState.done) {
+            return StartUpView();
+          }
+
+          // Otherwise, show something whilst waiting for initialization to complete
+          return CircularProgressIndicator();
+        },
+      ),
       onGenerateRoute: router.generateRoute,
     );
   }

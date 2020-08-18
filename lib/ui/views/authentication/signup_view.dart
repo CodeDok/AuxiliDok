@@ -22,6 +22,7 @@ class _SignUpViewState extends State<SignUpView> {
     return ViewModelBuilder.reactive(
       viewModelBuilder: () => SignUpViewModel(),
       builder: (context, model, widget) => Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Center(
           child: Container(
             height: mediaQuery.size.height*0.6,
