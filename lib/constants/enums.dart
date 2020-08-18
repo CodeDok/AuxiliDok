@@ -2,14 +2,14 @@
 import 'constants.dart';
 
 enum userRole {
-  BusinessUser,
-  NormalUser,
+  Normal,
+  Admin,
 }
 extension userRoleExtension on userRole {
 
   static const roles = {
-    userRole.BusinessUser : 'Business User',
-    userRole.NormalUser : 'Normal User',
+    userRole.Normal : userrole_normal,
+    userRole.Admin : userrole_admin,
   };
 
   String get role => roles[this];
