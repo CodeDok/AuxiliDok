@@ -38,8 +38,7 @@ class _UserImagePickerState extends State<UserImagePicker> {
             width: 70,
             height: 70,
           ) 
-          : new Image.network(
-            'https://firebasestorage.googleapis.com/v0/b/auxilidok.appspot.com/o/user_image%2Fdefault_profile_image.png.png?alt=media&token=0ed23918-8380-47c7-b10b-c83e6085561d',
+          : new Image.asset('assets/images/default_profile_image.png',
             fit: BoxFit.cover,
             width: 70,
             height: 70,
