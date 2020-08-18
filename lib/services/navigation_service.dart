@@ -13,7 +13,7 @@ class NavigationService {
     return _navigationKey.currentState.pushNamed(routeName, arguments: arguments);
   }
 
-  Future<void> popBack() {
+  void popBack() {
     _navigationKey.currentState.pop();
   }
 }

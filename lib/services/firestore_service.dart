@@ -5,12 +5,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import '../constants/constants.dart' as constant;
-import '../models/user.dart';
 import '../models/user.dart' as userModel;
 
 class FirestoreService {
   final CollectionReference _usersCollectionReference =
-      Firestore.instance.collection('users');
+      FirebaseFirestore.instance.collection('users');
   final StorageReference storageRef = FirebaseStorage.instance.ref();
 
   Future<String> uploadeProfilePicture(File profilePicture, String userId) async {
@@ -26,10 +25,10 @@ class FirestoreService {
     }
   }
 
-  Future<void> createUser(userModel.User user, File profilePicture, AuthResult authResult) async {
+  Future<void> createUser(userModel.User user, File profilePicture, UserCredential authResult) async {
     try {
       user.profilePictureUrl = await uploadeProfilePicture(profilePicture, authResult.user.uid);
-      await _usersCollectionReference.document(authResult.user.uid).setData({
+      await _usersCollectionReference.doc(authResult.user.uid).set({
         'profilPictureUrl': user.profilePictureUrl,
         'userRole': user.userrole,
         'username': user.username,
@@ -39,10 +38,10 @@ class FirestoreService {
     }
   }
 
-  Future<User> getUser(String uid) async {
+  Future<userModel.User> getUser(String uid) async {
     try {
-      var userData = await _usersCollectionReference.document(uid).get();
-      return userModel.User.fromData(userData.data);
+      var userData = await _usersCollectionReference.doc(uid).get();
+      return userModel.User.fromData(userData.data());
     } catch (e) {
       print(e);
     }

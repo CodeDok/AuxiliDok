@@ -3,15 +3,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import '../locator.dart';
-import '../models/user.dart';
+import '../models/user.dart' as userModel;
 import 'firestore_service.dart';
 
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirestoreService _firestoreService = locator<FirestoreService>();
-  AuthResult authResult;
-  User _currentUser;
-  User get currentUser => _currentUser;
+  UserCredential authResult;
+  userModel.User _currentUser;
+  userModel.User get currentUser => _currentUser;
 
   Future<bool> signUpWithEmailAndPassword({
       @required String email,
@@ -23,7 +23,7 @@ class AuthenticationService {
     try {
       authResult = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
       if (authResult == null) throw new Exception();
-      User user = User(
+      userModel.User user = userModel.User(
         id: authResult.user.uid,
         email: email,
         username: username,
@@ -54,12 +54,12 @@ class AuthenticationService {
   }
 
   Future<bool> isUserLoggedIn() async {
-    var user = await _firebaseAuth.currentUser();
+    var user = await _firebaseAuth.currentUser;
     await _populateCurrentUser(user);
     return user != null;
   }
 
-  Future _populateCurrentUser(FirebaseUser user) async {
+  Future _populateCurrentUser(User user) async {
     if (user != null) {
       _currentUser = await _firestoreService.getUser(user.uid);
     }

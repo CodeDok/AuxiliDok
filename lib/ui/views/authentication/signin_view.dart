@@ -1,11 +1,11 @@
-import 'package:auxilidok/constants/constants.dart';
-import 'package:auxilidok/ui/widgets/busy_button.dart';
-import 'package:auxilidok/ui/widgets/textFormWidget.dart';
-import 'package:auxilidok/viewmodels/authentication/signin_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:outline_gradient_button/outline_gradient_button.dart';
 import 'package:stacked/stacked.dart';
+
+import '../../../constants/constants.dart';
+import '../../../viewmodels/authentication/signin_view_model.dart';
+import '../../widgets/busy_button.dart';
+import '../../widgets/textFormWidget.dart';
 
 class SignInView extends StatelessWidget {
   final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
