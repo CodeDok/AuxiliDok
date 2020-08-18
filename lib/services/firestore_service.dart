@@ -30,10 +30,8 @@ class FirestoreService {
     try {
       user.profilePictureUrl = await uploadeProfilePicture(profilePicture, authResult.user.uid);
       await _usersCollectionReference.document(authResult.user.uid).setData({
-        'firstName': user.firstName,
-        'lastName': user.lastName,
         'profilPictureUrl': user.profilePictureUrl,
-        'userRole': user.userRole,
+        'userRole': user.userrole,
         'username': user.username,
       });
     } catch (e) {

@@ -47,6 +47,7 @@ dependencies:
   intl: ^0.16.1
   outline_gradient_button: ^1.0.0+2
   get_it: ^4.0.4
+  get: ^3.4.6
 
 
   # The following adds the Cupertino Icons font to your application.

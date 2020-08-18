@@ -7,9 +7,13 @@ const String userImageFolder = 'user_image';
 const String startUpScreen = '/';
 const String signIn = '/signIn';
 const String signUp = '/signUp';
+const String home = '/home';
 
-// Sign Up
-const String signUpWithEmailAndPassword = '/signUpWithEmailAndPassword';
 
-// Sign In
-const String signInWithEmailAndPassword = '/signInWithEmailAndPassword'; 
+// User attributes
+const String email = 'E-Mail';
+const String password = 'Password';
+const String userrole = 'User Role';
+const String username = 'Username';
+const String userrole_admin = 'Admin';
+const String userrole_normal = 'Normal';

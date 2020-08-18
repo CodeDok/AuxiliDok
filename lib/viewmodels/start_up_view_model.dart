@@ -15,7 +15,7 @@ class StartUpViewModel extends ChangeNotifier{
     var hasLoggedIn = await _authenticationService.isUserLoggedIn();
 
     if(hasLoggedIn) {
-      _navigationService.navigateTo(startUpScreen);
+      _navigationService.navigateTo(home);
     } else {
       _navigationService.navigateTo(signIn);
     }
