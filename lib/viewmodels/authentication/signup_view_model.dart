@@ -21,16 +21,38 @@ class SignUpViewModel extends BaseViewModel {
 
   Future<void> handleSignUp(GlobalKey<FormBuilderState> _formKey) async {
     if (_formKey.currentState.saveAndValidate()) {
-      final _formData = _formKey.currentState.value;
-      final result = await _authenticationService.signUpWithEmailAndPassword(
-        email: _formData[constant.email],
-        profilePicture: _pickedImage,
-        password: _formData[constant.password],
-        userRole: _formData[constant.userrole],
-        username: _formData[constant.username]);
-      if(result != false) {
-        _navigationService.navigateTo(constant.startUpScreen);
+      try {
+        final _formData = _formKey.currentState.value;
+        final result = await _authenticationService.signUpWithEmailAndPassword(
+          email: _formData[constant.email],
+          profilePicture: _pickedImage,
+          password: _formData[constant.password],
+          userRole: _formData[constant.userrole],
+          username: _formData[constant.username]);
+        if(result) {
+          _navigationService.navigateTo(constant.startUpScreen);
+        }
+      } catch (error) {
+        showDialog(
+          context:
+              _navigationService.navigationKey.currentState.overlay.context,
+          builder: (context) => new AlertDialog(
+            title: Text('Error'),
+            content: Text(error),
+            actions: [
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  _navigationService.pop();
+                },
+              )
+            ],
+          ),
+        );
+      } finally {
+        setBusy(false);
       }
+      
     }
   }
 

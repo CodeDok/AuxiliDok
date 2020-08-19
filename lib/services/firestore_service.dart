@@ -43,7 +43,6 @@ class FirestoreService {
       var userData = await _usersCollectionReference.doc(uid).get();
       return userModel.User.fromData(userData.data());
     } catch (e) {
-      print(e);
     }
   }
 }

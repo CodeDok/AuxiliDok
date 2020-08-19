@@ -32,7 +32,6 @@ dependencies:
   firebase_storage: ^4.0.0
 
   # Location | Maps
-  google_maps_flutter: ^0.5.29
   location: ^3.0.2
   
   # Storage | Data

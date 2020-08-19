@@ -43,6 +43,9 @@ class _SignUpViewState extends State<SignUpView> {
                         TextFormWidget(
                           attributeAndLabel: constant.username,
                           icon: Icons.person,
+                          validation: [
+                            FormBuilderValidators.minLength(3, errorText: 'Must be greater than 3 characters!'),
+                          ],
                         ),
                         SizedBox(
                           height: 5,
@@ -51,6 +54,10 @@ class _SignUpViewState extends State<SignUpView> {
                           attributeAndLabel: constant.email,
                           keyboardType: TextInputType.emailAddress,
                           icon: Icons.local_post_office,
+                          validation: [
+                            FormBuilderValidators.email(errorText: 'Enter a valid email format'),
+                            FormBuilderValidators.minLength(5, errorText: 'Must be greater than 5 characters!')
+                          ],
                         ),
                         SizedBox(
                           height: 5,
@@ -59,6 +66,9 @@ class _SignUpViewState extends State<SignUpView> {
                             attributeAndLabel: constant.password, 
                             obTxt: true,
                             icon: Icons.vpn_key,
+                            validation: [
+                              FormBuilderValidators.minLength(6, errorText: 'Must be greater than 6 characters!'),
+                            ],
                         ),
                         BusyButton(
                           title: 'Sign up',
@@ -70,7 +80,7 @@ class _SignUpViewState extends State<SignUpView> {
                         FlatButton(
                           child: Text('Sign in with an existing Account'),
                           onPressed: () {
-                            model.navigateToSignUp();
+                            model.navigateToSignIn();
                           },
                         ),
                       ],

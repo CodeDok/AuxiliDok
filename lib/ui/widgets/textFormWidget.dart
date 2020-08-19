@@ -61,8 +61,7 @@ class _TextFormWidgetState extends State<TextFormWidget> {
         :null,
       ),
       validators: [
-        FormBuilderValidators.required(),
-        FormBuilderValidators.min(3),
+        FormBuilderValidators.required(errorText: 'Required Field!'),
         if (widget.validation != null) ...widget.validation,
       ],
       obscureText: isObTxt,

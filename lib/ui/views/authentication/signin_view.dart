@@ -37,11 +37,18 @@ class SignInView extends StatelessWidget {
                           attributeAndLabel: email, 
                           keyboardType: TextInputType.emailAddress,
                           icon: Icons.local_post_office,
+                          validation: [
+                            FormBuilderValidators.email(errorText: 'Enter a valid email format!'),
+                            FormBuilderValidators.minLength(5, errorText: 'Must be greater than 5 characters!')
+                          ],
                         ),
                         TextFormWidget(
                           attributeAndLabel: password, 
                           obTxt: true,
                           icon: Icons.vpn_key,
+                          validation: [
+                            FormBuilderValidators.minLength(6, errorText: 'Must be greater than 6 characters!'),
+                          ],
                         ),
                         BusyButton(
                           title: 'Sign In',

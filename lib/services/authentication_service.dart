@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'package:auxilidok/models/exceptions/auth_exception.dart';
+import 'package:auxilidok/services/navigation_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import '../locator.dart';
 import '../models/user.dart' as userModel;
 import 'firestore_service.dart';
@@ -9,6 +11,7 @@ import 'firestore_service.dart';
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirestoreService _firestoreService = locator<FirestoreService>();
+  final NavigationService _navigationService = locator<NavigationService>();
   UserCredential authResult;
   userModel.User _currentUser;
   userModel.User get currentUser => _currentUser;
@@ -30,9 +33,8 @@ class AuthenticationService {
       );
       await _firestoreService.createUser(user, profilePicture, authResult);
       return authResult.user != null;
-    } catch (e) {
-      // Get.snackbar('Error', e.toString());
-      print(e);
+    } on FirebaseAuthException catch (error) {
+      throw AuthException(error.code).toString();
     }
   }
 
@@ -42,9 +44,9 @@ class AuthenticationService {
           email: email, password: password);
       if (authResult == null) throw new Exception();
       await _populateCurrentUser(authResult.user);
-    } catch (e) {
-      // Get.snackbar('Error', e.toString());
-      print(e);
+      return authResult.user != null;
+    } on FirebaseAuthException catch (error) {
+      throw AuthException(error.code).toString();
     }
   }
 
@@ -54,7 +56,7 @@ class AuthenticationService {
   }
 
   Future<bool> isUserLoggedIn() async {
-    var user = await _firebaseAuth.currentUser;
+    var user = _firebaseAuth.currentUser;
     await _populateCurrentUser(user);
     return user != null;
   }

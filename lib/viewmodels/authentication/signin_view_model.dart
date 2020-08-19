@@ -8,25 +8,45 @@ import '../../services/authentication_service.dart';
 import '../../services/navigation_service.dart';
 
 class SignInViewModel extends BaseViewModel {
-  final AuthenticationService _authenticationService = locator<AuthenticationService>();
+  final AuthenticationService _authenticationService =
+      locator<AuthenticationService>();
   final NavigationService _navigationService = locator<NavigationService>();
-
 
   Future<void> handleSignIn(GlobalKey<FormBuilderState> _formKey) async {
     if (_formKey.currentState.saveAndValidate()) {
       final _formData = _formKey.currentState.value;
-      setBusy(true);
-      final result = await _authenticationService.signInWithEmailAndPassword(
-        email: _formData[constant.email],
-        password: _formData[constant.password]
+      try {
+        setBusy(true);
+        final result = await _authenticationService.signInWithEmailAndPassword(
+            email: _formData[constant.email],
+            password: _formData[constant.password]);
+        setBusy(false);
+        if (result != false) {
+          _navigationService.navigateTo(constant.startUpScreen);
+        }
+      } catch (error) {
+        showDialog(
+          context:
+              _navigationService.navigationKey.currentState.overlay.context,
+          builder: (context) => new AlertDialog(
+            title: Text('Error'),
+            content: Text(error),
+            actions: [
+              FlatButton(
+                child: Text('Ok'),
+                onPressed: () {
+                  _navigationService.pop();
+                },
+              )
+            ],
+          ),
         );
-      setBusy(false);
-      if(result != false) {
-        _navigationService.navigateTo(constant.startUpScreen);
+      } finally {
+        setBusy(false);
       }
     }
   }
-    
+
   void navigateToSignUp() {
     _navigationService.navigateTo(constant.signUp);
   }
