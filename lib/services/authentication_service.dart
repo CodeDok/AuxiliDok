@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:auxilidok/models/exceptions/auth_exception.dart';
-import 'package:auxilidok/services/navigation_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,6 @@ import 'firestore_service.dart';
 class AuthenticationService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirestoreService _firestoreService = locator<FirestoreService>();
-  final NavigationService _navigationService = locator<NavigationService>();
   UserCredential authResult;
   userModel.User _currentUser;
   userModel.User get currentUser => _currentUser;
@@ -43,7 +41,7 @@ class AuthenticationService {
       authResult = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
       if (authResult == null) throw new Exception();
-      await _populateCurrentUser(authResult.user);
+      await populateCurrentUser(authResult.user);
       return authResult.user != null;
     } on FirebaseAuthException catch (error) {
       throw AuthException(error.code).toString();
@@ -55,13 +53,10 @@ class AuthenticationService {
     await _firebaseAuth.signOut();
   }
 
-  Future<bool> isUserLoggedIn() async {
-    var user = _firebaseAuth.currentUser;
-    await _populateCurrentUser(user);
-    return user != null;
-  }
+  Stream<User> get isUserLoggedIn => _firebaseAuth.idTokenChanges();
+  
 
-  Future _populateCurrentUser(User user) async {
+  Future populateCurrentUser(User user) async {
     if (user != null) {
       _currentUser = await _firestoreService.getUser(user.uid);
     }

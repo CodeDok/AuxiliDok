@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:stacked/stacked.dart';
 
-import '../../../constants/constants.dart' as constant;
+import '../../../helper/constants.dart' as constant;
 import '../../../viewmodels/authentication/signup_view_model.dart';
-import '../../widgets/busy_button.dart';
-import '../../widgets/textFormWidget.dart';
-import '../../widgets/user_image_picker.dart';
+import '../../widgets/mini_helper/busy_button.dart';
+import '../../widgets/mini_helper/textFormWidget.dart';
+import '../../widgets/mini_helper/user_image_picker.dart';
 
 class SignUpView extends StatefulWidget {
   @override

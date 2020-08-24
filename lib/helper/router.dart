@@ -1,9 +1,11 @@
 import 'package:auxilidok/ui/views/authentication/signup_view.dart';
-import 'package:auxilidok/ui/views/home_view.dart';
-import 'package:auxilidok/ui/views/start_up_view.dart';
+import 'package:auxilidok/ui/views/credit_manager/cm_overview_view.dart';
+import 'package:auxilidok/ui/views/user/home_view.dart';
+import 'package:auxilidok/ui/views/authentication/start_up_view.dart';
+import 'package:auxilidok/ui/views/user/profile_view.dart';
 import 'package:flutter/material.dart';
-import '../constants/constants.dart';
-import 'views/authentication/signin_view.dart';
+import 'constants.dart';
+import '../ui/views/authentication/signin_view.dart';
 
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -27,6 +29,16 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(
         routeName: settings.name,
         viewToShow: HomeView(),
+      );
+    case profile:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: ProfileView(),
+      );
+    case cmOverview:
+      return _getPageRoute(
+        routeName: settings.name,
+        viewToShow: CmOverviewView(),
       );
     default:
       return MaterialPageRoute(

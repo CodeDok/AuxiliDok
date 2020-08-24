@@ -1,13 +1,13 @@
-import 'package:auxilidok/viewmodels/start_up_view_model.dart';
+import 'package:auxilidok/viewmodels/authentication/start_up_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 class StartUpView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<StartUpViewModel>.reactive(
-      viewModelBuilder: () => StartUpViewModel(),
-      onModelReady: (model) => model.handleStartUpLogic(),
+    return ViewModelBuilder<StreamStartUpViewModel>.reactive(
+      viewModelBuilder: () => StreamStartUpViewModel(),
+      fireOnModelReadyOnce: true,
       builder: (context, model, child) => SafeArea(
         child: Scaffold(
           body: Center(

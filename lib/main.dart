@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'locator.dart';
 import 'services/navigation_service.dart';
-import 'ui/router.dart' as router;
-import 'ui/views/start_up_view.dart';
+import 'helper/router.dart' as router;
+import 'ui/views/authentication/start_up_view.dart';
 
 void main() {
   // Register all the models and services before the app starts
@@ -25,10 +25,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       navigatorKey: locator<NavigationService>().navigationKey,
       theme: ThemeData(
-        primaryColor: Color.fromARGB(255, 9, 202, 172),
-        backgroundColor: Color.fromARGB(255, 26, 27, 30),
+        primaryColor: Color.fromARGB(255, 20, 116, 143),
+        accentColor: Color.fromARGB(255, 250, 169, 22),
+        backgroundColor: Color.fromARGB(255, 255, 255, 255),
         textTheme: Theme.of(context).textTheme.apply(
-            ),
+      ),
       ),
       home: FutureBuilder(
         // Initialize FlutterFire
