@@ -1,11 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-
-import 'locator.dart';
+import 'app/router.dart' as router;
+import 'app/locator.dart';
 import 'services/navigation_service.dart';
-import 'helper/router.dart' as router;
-import 'ui/views/authentication/start_up_view.dart';
+import 'ui/authentication/startUp/start_up_view.dart';
 
 void main() {
   // Register all the models and services before the app starts
@@ -32,20 +31,14 @@ class MyApp extends StatelessWidget {
       ),
       ),
       home: FutureBuilder(
-        // Initialize FlutterFire
         future: Firebase.initializeApp(),
         builder: (context, snapshot) {
-          // Check for errors
           if (snapshot.hasError) {
             return Text('Test');
           }
-
-          // Once complete, show your application
           if (snapshot.connectionState == ConnectionState.done) {
             return StartUpView();
           }
-
-          // Otherwise, show something whilst waiting for initialization to complete
           return CircularProgressIndicator();
         },
       ),

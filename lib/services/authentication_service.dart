@@ -3,7 +3,7 @@ import 'package:auxilidok/models/exceptions/auth_exception.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../locator.dart';
+import '../app/locator.dart';
 import '../models/user.dart' as userModel;
 import 'firestore_service.dart';
 

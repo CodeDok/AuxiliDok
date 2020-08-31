@@ -1,5 +1,4 @@
-
-import 'package:auxilidok/helper/enums.dart';
+import '../app/enums.dart';
 import 'package:flutter/foundation.dart';
 
 class User {
