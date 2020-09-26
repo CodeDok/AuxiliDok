@@ -19,5 +19,6 @@ void setupLocator() {
   locator.registerLazySingleton(() => FutureProfileViewModel());
   locator.registerLazySingleton(() => ImagePickerService());
   locator.registerLazySingleton(() => CreditManagerService());
+  // locator.registerSingletonAsync(() async => await CreditManagerService.init());
 
 }

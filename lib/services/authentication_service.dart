@@ -1,9 +1,12 @@
 import 'dart:io';
-import 'package:auxilidok/models/exceptions/auth_exception.dart';
+
+import 'package:auxilidok/services/credit_manager_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
 import '../app/locator.dart';
+import '../models/exceptions/auth_exception.dart';
 import '../models/user.dart' as userModel;
 import 'firestore_service.dart';
 
@@ -50,6 +53,7 @@ class AuthenticationService {
 
   Future<void> logout() async{
     _currentUser = null;
+    locator.resetLazySingleton(instance: locator<CreditManagerService>());
     await _firebaseAuth.signOut();
   }
 
@@ -59,6 +63,7 @@ class AuthenticationService {
   Future populateCurrentUser(User user) async {
     if (user != null) {
       _currentUser = await _firestoreService.getUser(user.uid);
+      
     }
   }
 }

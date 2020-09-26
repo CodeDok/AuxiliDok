@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 class CMCustomDrawer extends StatefulWidget {
   final double height;
   bool expanded;
+  Function setIndex;
 
-  CMCustomDrawer({
+  CMCustomDrawer(
+    this.setIndex,
+    {
     this.height,
     this.expanded = false,
   });
@@ -15,6 +18,7 @@ class CMCustomDrawer extends StatefulWidget {
 }
 
 class _CMCustomDrawerState extends State<CMCustomDrawer> {
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -34,25 +38,25 @@ class _CMCustomDrawerState extends State<CMCustomDrawer> {
           IconButton(
             icon: Icon(Icons.home, color: Colors.white),
             onPressed: () {
-              
+              widget.setIndex(0);
             },
           ),
           IconButton(
             icon: Icon(Icons.view_list, color: Colors.white),
             onPressed: () {
-              
+              widget.setIndex(1);
             },
           ),
           IconButton(
             icon: Icon(Icons.archive, color: Colors.white),
             onPressed: () {
-              
+              widget.setIndex(2);
             },
           ),
           IconButton(
             icon: Icon(Icons.settings, color: Colors.white),
             onPressed: () {
-              
+              widget.setIndex(3);
             },
           ),
         ],

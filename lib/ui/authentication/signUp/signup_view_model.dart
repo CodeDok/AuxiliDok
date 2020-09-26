@@ -16,7 +16,6 @@ class SignUpViewModel extends BaseViewModel {
 
 
   void selectImage(File image) {
-    if (image == null) image = File(constant.defaultUserProfilePicture);
     _pickedImage = image;
   }
 

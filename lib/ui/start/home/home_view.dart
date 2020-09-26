@@ -7,9 +7,6 @@ import 'package:stacked/stacked.dart';
 import 'home_view_model.dart';
 
 class HomeView extends StatelessWidget {
-
-
-
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<HomeViewModel>.reactive(
