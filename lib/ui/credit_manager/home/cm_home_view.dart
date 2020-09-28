@@ -1,6 +1,5 @@
 import 'package:animations/animations.dart';
 import 'package:auxilidok/ui/credit_manager/home/cm_home_view_model.dart';
-import 'package:auxilidok/ui/credit_manager/overview/cm_overview_view.dart';
 import 'package:auxilidok/ui/smart_widgets/credit_manager/cm_custom_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';

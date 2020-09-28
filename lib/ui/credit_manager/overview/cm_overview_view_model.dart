@@ -1,13 +1,14 @@
 
-import 'package:auxilidok/app/enums.dart';
-import 'package:auxilidok/models/credit_manager/credit.dart';
-import 'package:auxilidok/models/user.dart';
-import 'package:auxilidok/services/authentication_service.dart';
+import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 
+import '../../../app/enums.dart';
 import '../../../app/locator.dart';
+import '../../../models/credit_manager/credit.dart';
 import '../../../models/credit_manager/debtor.dart';
 import '../../../models/credit_manager/repayment.dart';
+import '../../../models/user.dart';
+import '../../../services/authentication_service.dart';
 import '../../../services/credit_manager_service.dart';
 
 class CMOverviewViewModel extends ReactiveViewModel {
@@ -18,13 +19,45 @@ class CMOverviewViewModel extends ReactiveViewModel {
   List<ReactiveServiceMixin> get reactiveServices => [_creditManagerService];
   
   List<Credit> _creditList;
-  Credit _highestRemainingDept;
+  
 
 
   List<Credit> get credit => _creditList;
-  Credit get highestRemainingDept => _highestRemainingDept;
+  Credit get highestRemainingDept => _creditManagerService.highestRemainingDept;
   double get outstandingBalance => _creditManagerService.getTotalOutStandingBalance;
   String get userProfilePicture => _authenticationService.currentUser.profilePictureUrl;
+  String get nextRepaymentDate {
+    final pattern = DateFormat('d.M.y');
+    return _creditManagerService.nextRepaymentDate != null ? pattern.format(_creditManagerService.nextRepaymentDate) : pattern.format(DateTime.now());
+  }
+  String get nextRepaymentDebtors {
+    String debtors = '';
+    if(_creditManagerService.upcomingCreditRepayment != null) {
+      for(int i = 0; i < _creditManagerService.upcomingCreditRepayment.debtors.length; i++) {
+        debtors += ' ${_creditManagerService.upcomingCreditRepayment.debtors[i].name} ';
+        if(i<_creditManagerService.upcomingCreditRepayment.debtors.length-1) debtors += '|';
+      }
+    }
+    return debtors;
+  }
+  String get nextRepaymentAmount {
+        if(_creditManagerService.upcomingCreditRepayment == null) return '';
+    Credit nextRepayment = _creditManagerService.upcomingCreditRepayment;
+    int interval = Credit.getInterval(nextRepayment.interestInterval);
+    int intervalsLeft = 1;
+    DateTime tempDate = nextRepayment.startDate;
+    while(tempDate.add(Duration(days: interval)).isBefore(nextRepayment.endDate)) {
+      tempDate = tempDate.add(Duration(days: interval));
+      intervalsLeft++;
+    }
+    double paidAmount = 0;
+    for(int i = 0; i < nextRepayment.repayments.length; i++) {
+      paidAmount += nextRepayment.repayments[i].amount;
+    }
+    print(intervalsLeft);
+    print(paidAmount);
+    return ((nextRepayment.loanedAmount - paidAmount) / intervalsLeft).toString();
+  }
   User get getUser => _authenticationService.currentUser;
 
   CMOverviewViewModel() {
@@ -38,38 +71,19 @@ class CMOverviewViewModel extends ReactiveViewModel {
       _creditManagerService.setInitialization = true;
     }
     if(_creditManagerService.creditList != null && _creditManagerService.creditList.isNotEmpty) {
-      print('isFilled');
       _creditList = _creditManagerService.creditList; 
-      _getHighestDept();
       notifyListeners();
     }
     setBusy(false);
   }
 
-  void _getHighestDept() {
-    List<Credit> destructionFree = credit.where((credit) => credit.archived == false).toList();
-    destructionFree.sort((creditOne, creditTwo) {
-      double remainingOne = creditOne.loanedAmount;
-      double remainingTwo = creditTwo.loanedAmount;
-      creditOne.repayments.forEach((repayment) {
-        remainingOne -= repayment.amount;
-      });
-      creditTwo.repayments.forEach((repayment) {
-        remainingTwo -= repayment.amount;
-      });
-      return remainingTwo.compareTo(remainingOne);
-    });
-    _highestRemainingDept = destructionFree.first;
-  }
- 
-
-  void addCredit() {
+    void addCredit() {
     _creditManagerService.addCredit(
       archived: false,
       currency: 'Euro',
       debtors: [Debtor(name: 'John'), Debtor(name: 'Marius')],
       endDate: DateTime.now(),
-      startDate: DateTime.now(),
+      startDate: DateTime(2020,10,12),
       interestInterval: creditManagerInterval.weekly.interval,
       interestPercentage: 12,
       loanedAmount: 200,
@@ -77,9 +91,5 @@ class CMOverviewViewModel extends ReactiveViewModel {
       repayments: [Repayment(amount: 10, date: DateTime.now())]
     );
   }
-
-  
-
-
 
 }

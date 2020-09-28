@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:auxilidok/app/constants.dart';
+
 import 'debtor.dart';
 import 'repayment.dart';
 
@@ -62,6 +64,25 @@ class Credit {
       endDate: DateTime.parse(map['endDate']),
       archived: map['archived']
     );
+  }
+
+  static int getInterval(String interval) {
+    switch (interval) {
+        case cm_daily:
+          return 1;
+          break;
+        case cm_weekly:
+          return 7;
+          break;
+        case cm_monthly:
+          return 30;
+          break;
+        case cm_yearly:
+          return 365;
+          break;
+        default:
+          return 1;
+      }
   }
 
   String toJson() => json.encode(toMap());

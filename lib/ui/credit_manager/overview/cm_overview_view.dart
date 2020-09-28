@@ -9,7 +9,7 @@ class CMOverviewView extends StatelessWidget {
     var mediaQuery = MediaQuery.of(context);
     return ViewModelBuilder<CMOverviewViewModel>.reactive(
       viewModelBuilder: () => CMOverviewViewModel(),
-      onModelReady: (model) =>  model.init(),
+      onModelReady: (model) async => model.init(),
       builder: (context, model, child) => 
       model.isBusy ?
       Center(child: CircularProgressIndicator())
@@ -47,7 +47,8 @@ class CMOverviewView extends StatelessWidget {
                         Column(
                           children: [
                             Text(model.highestRemainingDept != null ? model.highestRemainingDept.loanedAmount.toString() : 0.toString()),
-                            Text(model.highestRemainingDept != null ? model.highestRemainingDept.name : 'No Name'),
+                            Text(model.highestRemainingDept.name),
+                            // Text(model.highestRemainingDept != null ? model.highestRemainingDept.name : 'No Name'),
                           ]
                         )
                       ],
@@ -86,9 +87,9 @@ class CMOverviewView extends StatelessWidget {
                     children: [
                       Column(
                         children: [
-                          Text('Fälligkeitsdatum'),
-                          Text('Betrag'),
-                          Text('Person')
+                          Text(model.nextRepaymentDate),
+                          Text(model.nextRepaymentAmount),
+                          Text(model.nextRepaymentDebtors)
                         ],
                       ),
                       ClipOval(
@@ -110,11 +111,7 @@ class CMOverviewView extends StatelessWidget {
                   onPressed: () {
                     model.addCredit();
                   },
-                )
-                // Container(
-                //   // Wer einem was noch zurückzahlen muss
-                // ),
-                
+                )                
               ],
             ),
           ],

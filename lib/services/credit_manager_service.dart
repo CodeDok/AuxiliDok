@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:observable_ish/observable_ish.dart';
 import 'package:stacked/stacked.dart';
 
@@ -14,10 +15,16 @@ class CreditManagerService with ReactiveServiceMixin{
 
   RxList<Credit> _creditList = RxList<Credit>();
   List<Credit> get creditList => _creditList;
+  Credit _highestRemainingDept;
+  DateTime _nextRepaymentDate;
+  Credit _upcomingCreditRepayment;
   bool _isInitialized = false;
 
   double _totalOutstandingBalance;
+  DateTime get nextRepaymentDate => _nextRepaymentDate;
+  Credit get upcomingCreditRepayment => _upcomingCreditRepayment;
   double get getTotalOutStandingBalance => _totalOutstandingBalance;
+  Credit get highestRemainingDept => _highestRemainingDept;
   bool get isInitialized => _isInitialized;
   set setInitialization(bool init) {_isInitialized = init;}
 
@@ -27,6 +34,8 @@ class CreditManagerService with ReactiveServiceMixin{
       _creditList.addAll(credits);
       // print('initStream ${_creditList}');
       _calculateTotalOutstandingBalance();
+      _getHighestDept();
+      _getUpcommingCreditRepayments();
       notifyListeners();
     }
   }
@@ -68,6 +77,44 @@ class CreditManagerService with ReactiveServiceMixin{
       _outstandingBalance += _remainingBalance;
     });
     _totalOutstandingBalance = _outstandingBalance;
+  }
+
+  void _getHighestDept() {
+    List<Credit> activeCredits = _creditList.where((credit) => credit.archived == false).toList();
+    activeCredits.sort((creditOne, creditTwo) {
+      double remainingOne = creditOne.loanedAmount;
+      double remainingTwo = creditTwo.loanedAmount;
+      creditOne.repayments.forEach((repayment) {
+        remainingOne -= repayment.amount;
+      });
+      creditTwo.repayments.forEach((repayment) {
+        remainingTwo -= repayment.amount;
+      });
+      return remainingTwo.compareTo(remainingOne);
+    });
+    _highestRemainingDept = activeCredits.first;
+  }
+ 
+  void _getUpcommingCreditRepayments() {
+    List<Credit> activeCredits = _creditList.where((credit) => credit.archived == false).toList();
+    Credit resultCredit;
+    DateTime earliestRepaymentDate = DateTime(10000);
+    activeCredits.forEach((credit){
+      DateTime nextRepayment;
+      var interval = Credit.getInterval(credit.interestInterval);
+      
+      DateTime date = credit.startDate;
+      while(date.isBefore(DateTime.now())) {
+        date = date.add(Duration(days: interval));
+        nextRepayment = date;
+      }
+      if(nextRepayment.isBefore(earliestRepaymentDate)) {
+        earliestRepaymentDate = nextRepayment;
+        resultCredit = credit;
+      }
+    });
+    _upcomingCreditRepayment = resultCredit;
+    _nextRepaymentDate = earliestRepaymentDate;
   }
 
 
