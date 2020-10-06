@@ -33,9 +33,11 @@ class CreditManagerService with ReactiveServiceMixin{
       _creditList.clear();
       _creditList.addAll(credits);
       // print('initStream ${_creditList}');
-      _calculateTotalOutstandingBalance();
-      _getHighestDept();
-      _getUpcommingCreditRepayments();
+      if(_creditList != null && _creditList.isNotEmpty) {
+        _calculateTotalOutstandingBalance();
+        _getHighestDept();
+        _getUpcommingCreditRepayments();
+      }
       notifyListeners();
     }
   }
@@ -104,7 +106,7 @@ class CreditManagerService with ReactiveServiceMixin{
       var interval = Credit.getInterval(credit.interestInterval);
       
       DateTime date = credit.startDate;
-      while(date.isBefore(DateTime.now())) {
+      while(date.isBefore(credit.endDate)) {
         date = date.add(Duration(days: interval));
         nextRepayment = date;
       }

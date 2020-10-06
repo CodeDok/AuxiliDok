@@ -47,8 +47,8 @@ class CMOverviewView extends StatelessWidget {
                         Column(
                           children: [
                             Text(model.highestRemainingDept != null ? model.highestRemainingDept.loanedAmount.toString() : 0.toString()),
-                            Text(model.highestRemainingDept.name),
-                            // Text(model.highestRemainingDept != null ? model.highestRemainingDept.name : 'No Name'),
+                            // Text(model.highestRemainingDept.name),
+                            Text(model.highestRemainingDept != null ? model.highestRemainingDept.name : 'No Name'),
                           ]
                         )
                       ],
