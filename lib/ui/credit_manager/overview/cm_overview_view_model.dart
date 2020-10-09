@@ -12,7 +12,7 @@ import '../../../services/authentication_service.dart';
 import '../../../services/credit_manager_service.dart';
 
 class CMOverviewViewModel extends ReactiveViewModel {
-  final CreditManagerService _creditManagerService = locator<CreditManagerService>();
+  final CreditManagerService _creditManagerService = locator.get(instanceName: 'CreditManager');
   final AuthenticationService _authenticationService = locator<AuthenticationService>();
 
   @override
@@ -41,7 +41,7 @@ class CMOverviewViewModel extends ReactiveViewModel {
     return debtors;
   }
   String get nextRepaymentAmount {
-        if(_creditManagerService.upcomingCreditRepayment == null) return '';
+    if(_creditManagerService.upcomingCreditRepayment == null) return '';
     Credit nextRepayment = _creditManagerService.upcomingCreditRepayment;
     int interval = Credit.getInterval(nextRepayment.interestInterval);
     int intervalsLeft = 1;
@@ -54,9 +54,14 @@ class CMOverviewViewModel extends ReactiveViewModel {
     for(int i = 0; i < nextRepayment.repayments.length; i++) {
       paidAmount += nextRepayment.repayments[i].amount;
     }
-    print(intervalsLeft);
-    print(paidAmount);
-    return ((nextRepayment.loanedAmount - paidAmount) / intervalsLeft).toString();
+    return ((nextRepayment.loanedAmount - paidAmount) / intervalsLeft).toStringAsFixed(2);
+  }
+  double get nextRepaymentFulfillmentFraction {
+    double fulfilled = 0;
+    _creditManagerService.upcomingCreditRepayment.repayments.forEach((repayment) {
+      fulfilled += repayment.amount;
+    });
+    return fulfilled / _creditManagerService.upcomingCreditRepayment.loanedAmount;
   }
   User get getUser => _authenticationService.currentUser;
 
@@ -66,10 +71,6 @@ class CMOverviewViewModel extends ReactiveViewModel {
 
   void init(){
     setBusy(true);
-    if(!_creditManagerService.isInitialized) {
-      _creditManagerService.initStream();
-      _creditManagerService.setInitialization = true;
-    }
     if(_creditManagerService.creditList != null && _creditManagerService.creditList.isNotEmpty) {
       _creditList = _creditManagerService.creditList; 
       notifyListeners();
@@ -77,7 +78,8 @@ class CMOverviewViewModel extends ReactiveViewModel {
     setBusy(false);
   }
 
-    void addCredit() {
+
+  void addCredit() {
     _creditManagerService.addCredit(
       archived: false,
       currency: 'Euro',

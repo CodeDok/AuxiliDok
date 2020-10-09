@@ -18,7 +18,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => FirestoreService());
   locator.registerLazySingleton(() => FutureProfileViewModel());
   locator.registerLazySingleton(() => ImagePickerService());
-  locator.registerLazySingleton(() => CreditManagerService());
+  locator.registerLazySingletonAsync(() => CreditManagerService.initStream(), instanceName: 'CreditManager');
   // locator.registerSingletonAsync(() async => await CreditManagerService.init());
 
 }

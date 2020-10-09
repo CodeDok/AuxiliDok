@@ -7,9 +7,10 @@ class Repayment {
   final double amount;
 
   Repayment({
-    @required this.amount,
+    @required var amount,
     @required this.date,
-  });
+  }):
+  amount = amount.toDouble();
 
 
 

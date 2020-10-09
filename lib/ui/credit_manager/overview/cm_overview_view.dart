@@ -46,9 +46,8 @@ class CMOverviewView extends StatelessWidget {
                         ),
                         Column(
                           children: [
-                            Text(model.highestRemainingDept != null ? model.highestRemainingDept.loanedAmount.toString() : 0.toString()),
-                            // Text(model.highestRemainingDept.name),
-                            Text(model.highestRemainingDept != null ? model.highestRemainingDept.name : 'No Name'),
+                            Text(model.highestRemainingDept.loanedAmount.toString()),
+                            Text(model.highestRemainingDept.name),
                           ]
                         )
                       ],
@@ -70,7 +69,7 @@ class CMOverviewView extends StatelessWidget {
                       ),
                       child: Image(
                         fit: BoxFit.fill,
-                        image: NetworkImage(model.userProfilePicture != null ? model.userProfilePicture : defaultFirestoreProfilePicture),
+                        image: NetworkImage(model.userProfilePicture ?? defaultFirestoreProfilePicture),
                       ),
                     ),
                   ),
@@ -92,17 +91,30 @@ class CMOverviewView extends StatelessWidget {
                           Text(model.nextRepaymentDebtors)
                         ],
                       ),
-                      ClipOval(
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 80,
-                          height: 80,
-                          decoration: BoxDecoration(
-                            color: Colors.green
-                          ),
-                          child: Text('Von wie viel')  
+                      Container(
+                        height: 60,
+                        width: 60,
+                        child: Stack(
+                          children: <Widget>[
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey, width: 1.0),
+                                color: Color.fromRGBO(220, 220, 220, 1),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            FractionallySizedBox(
+                              heightFactor: model.nextRepaymentFulfillmentFraction,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.yellow,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

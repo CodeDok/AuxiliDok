@@ -26,20 +26,24 @@ class CreditManagerService with ReactiveServiceMixin{
   double get getTotalOutStandingBalance => _totalOutstandingBalance;
   Credit get highestRemainingDept => _highestRemainingDept;
   bool get isInitialized => _isInitialized;
+  set creditList(List<Credit> credits) {_creditList = credits;}
   set setInitialization(bool init) {_isInitialized = init;}
 
-  Future<void> initStream() async {
-    await for (List<Credit> credits in _firestoreService.listenToCredits(_authenticationService.currentUser.id)) {
-      _creditList.clear();
-      _creditList.addAll(credits);
-      // print('initStream ${_creditList}');
-      if(_creditList != null && _creditList.isNotEmpty) {
-        _calculateTotalOutstandingBalance();
-        _getHighestDept();
-        _getUpcommingCreditRepayments();
+  CreditManagerService._create();
+
+  static Future<CreditManagerService> initStream() async {
+    CreditManagerService cm = CreditManagerService._create();
+     locator<FirestoreService>().listenToCredits(locator<AuthenticationService>().currentUser.id).listen((_) {}).onData((credits) {
+      cm.creditList.clear();
+      cm.creditList.addAll(credits);
+      if(cm.creditList != null && cm.creditList.isNotEmpty) {
+        cm._calculateTotalOutstandingBalance();
+        cm._getHighestDept();
+        cm._getUpcommingCreditRepayments();
       }
-      notifyListeners();
-    }
+      cm.notifyListeners();
+    });
+    return cm;
   }
 
   Future<void> addCredit({

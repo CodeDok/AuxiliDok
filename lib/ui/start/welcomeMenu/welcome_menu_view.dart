@@ -9,7 +9,11 @@ class WelcomeMenu extends StatelessWidget {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     return ViewModelBuilder<WelcomeMenuViewModel>.reactive(
       viewModelBuilder: () => WelcomeMenuViewModel(),
-      builder: (context, model, child) => Center(
+      builder: (context, model, child) => model.isBusy == true ?
+      Center(
+        child: CircularProgressIndicator()
+      )
+      :Center(
         child: Column(
           children: [
             FlatButton.icon(

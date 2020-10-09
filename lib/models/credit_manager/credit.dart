@@ -21,7 +21,7 @@ class Credit {
   Credit({
     this.id,
     this.name,
-    this.loanedAmount,
+    var loanedAmount,
     this.currency,
     this.repayments,
     this.debtors,
@@ -30,7 +30,9 @@ class Credit {
     this.startDate,
     this.endDate,
     this.archived
-  });
+  }):
+    loanedAmount = loanedAmount.toDouble();
+  
 
   Map<String, dynamic> toMap() {
     return {
