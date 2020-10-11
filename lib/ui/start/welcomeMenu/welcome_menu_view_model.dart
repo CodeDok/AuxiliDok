@@ -10,12 +10,11 @@ class WelcomeMenuViewModel extends BaseViewModel {
   AuthenticationService _authenticationService = locator<AuthenticationService>();
   NavigationService _navigationService = locator<NavigationService>();
 
-  void navigateToCM() {
-    setBusy(true);
-    locator.isReady(instanceName: 'CreditManager').then((value) {
-      setBusy(false);
+  Future<void> navigateToCM() async{
+    await runBusyFuture(locator.isReady(instanceName: 'CreditManager').then((value) {
       _navigationService.navigateToNamed(constants.cmHome);
-    });
+    }));
+     
   }
 
   void logout() {

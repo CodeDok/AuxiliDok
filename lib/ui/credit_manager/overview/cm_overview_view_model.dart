@@ -31,17 +31,17 @@ class CMOverviewViewModel extends ReactiveViewModel {
   }
   String get nextRepaymentDebtors {
     String debtors = '';
-    if(_creditManagerService.upcomingCreditRepayment != null) {
-      for(int i = 0; i < _creditManagerService.upcomingCreditRepayment.debtors.length; i++) {
-        debtors += ' ${_creditManagerService.upcomingCreditRepayment.debtors[i].name} ';
-        if(i<_creditManagerService.upcomingCreditRepayment.debtors.length-1) debtors += '|';
+    if(_creditManagerService.nextRepayment != null) {
+      for(int i = 0; i < _creditManagerService.nextRepayment.debtors.length; i++) {
+        debtors += ' ${_creditManagerService.nextRepayment.debtors[i].name} ';
+        if(i<_creditManagerService.nextRepayment.debtors.length-1) debtors += '|';
       }
     }
     return debtors;
   }
   String get nextRepaymentAmount {
-    if(_creditManagerService.upcomingCreditRepayment == null) return '';
-    Credit nextRepayment = _creditManagerService.upcomingCreditRepayment;
+    if(_creditManagerService.nextRepayment == null) return '';
+    Credit nextRepayment = _creditManagerService.nextRepayment;
     int interval = Credit.getInterval(nextRepayment.interestInterval);
     int intervalsLeft = 1;
     DateTime tempDate = nextRepayment.startDate;
@@ -53,15 +53,9 @@ class CMOverviewViewModel extends ReactiveViewModel {
     for(int i = 0; i < nextRepayment.repayments.length; i++) {
       paidAmount += nextRepayment.repayments[i].amount;
     }
-    return ((nextRepayment.loanedAmount - paidAmount) / intervalsLeft).toStringAsFixed(2);
+    return ((nextRepayment.repayableAmount() - paidAmount) / intervalsLeft).toStringAsFixed(2);
   }
-  double get nextRepaymentFulfillmentFraction {
-    double fulfilled = 0;
-    _creditManagerService.upcomingCreditRepayment.repayments.forEach((repayment) {
-      fulfilled += repayment.amount;
-    });
-    return fulfilled / _creditManagerService.upcomingCreditRepayment.loanedAmount;
-  }
+  double get nextRepaymentFulfillmentFraction => _creditManagerService.nextRepayment.fulfillmentFraction();
   User get getUser => _authenticationService.currentUser;
 
   CMOverviewViewModel() {
@@ -77,6 +71,11 @@ class CMOverviewViewModel extends ReactiveViewModel {
     setBusy(false);
   }
 
+  @override
+  void dispose() {
+    print('weg bin ich');
+    super.dispose();
+  }
 
   void addCredit() {
     _creditManagerService.addCredit(

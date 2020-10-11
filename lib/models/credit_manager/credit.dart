@@ -68,6 +68,22 @@ class Credit {
     );
   }
 
+  double repayableAmount() {
+    return double.parse((loanedAmount * ((interestPercentage+100) / 100)).toStringAsFixed(2));
+  }
+
+  double fulfillmentFraction() {
+    double fulfilled = 0;
+    repayments.forEach((repayment) {
+      fulfilled += repayment.amount;
+    });
+    return fulfilled / repayableAmount();
+  }
+
+  double repaymentTotal() {
+    return repayments.map((repayment) => repayment.amount).toList().fold(0, (previous, current) => previous + current);
+  }
+
   static int getInterval(String interval) {
     switch (interval) {
         case cm_daily:

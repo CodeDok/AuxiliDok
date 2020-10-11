@@ -16,12 +16,12 @@ class CreditManagerService with ReactiveServiceMixin{
   List<Credit> get creditList => _creditList;
   Credit _highestRemainingDept;
   DateTime _nextRepaymentDate;
-  Credit _upcomingCreditRepayment;
+  Credit _nextRepayment;
   bool _isInitialized = false;
 
   double _totalOutstandingBalance;
   DateTime get nextRepaymentDate => _nextRepaymentDate;
-  Credit get upcomingCreditRepayment => _upcomingCreditRepayment;
+  Credit get nextRepayment => _nextRepayment;
   double get getTotalOutStandingBalance => _totalOutstandingBalance;
   Credit get highestRemainingDept => _highestRemainingDept;
   bool get isInitialized => _isInitialized;
@@ -30,19 +30,18 @@ class CreditManagerService with ReactiveServiceMixin{
 
 
   Future<CreditManagerService> initStream() async {
-    CreditManagerService cm = CreditManagerService();
-     locator<FirestoreService>().listenToCredits(locator<AuthenticationService>().currentUser.id).listen((_) {}).onData((credits) {
-      cm.creditList.clear();
-      cm.creditList.addAll(credits);
-      if(cm.creditList != null && cm.creditList.isNotEmpty) {
-        cm._calculateTotalOutstandingBalance();
-        cm._getHighestDept();
-        cm._getUpcommingCreditRepayments();
-        cm.setInitialization = true;
+    locator<FirestoreService>().listenToCredits(locator<AuthenticationService>().currentUser.id).listen((credits) {
+      creditList.clear();
+      creditList.addAll(credits);
+      if(creditList != null && creditList.isNotEmpty) {
+        _calculateTotalOutstandingBalance();
+        _getHighestDept();
+        _getUpcommingCreditRepayments();
+        setInitialization = true;
       }
-      cm.notifyListeners();
+      notifyListeners();
     });
-    return cm;
+    return this;
   }
 
   Future<void> addCredit({
@@ -71,6 +70,7 @@ class CreditManagerService with ReactiveServiceMixin{
     ));
   }
 
+
   void _calculateTotalOutstandingBalance() {
     double _outstandingBalance = 0;
     _totalOutstandingBalance = 0;
@@ -87,17 +87,16 @@ class CreditManagerService with ReactiveServiceMixin{
   void _getHighestDept() {
     List<Credit> activeCredits = _creditList.where((credit) => credit.archived == false).toList();
     activeCredits.sort((creditOne, creditTwo) {
-      double remainingOne = creditOne.loanedAmount;
-      double remainingTwo = creditTwo.loanedAmount;
-      creditOne.repayments.forEach((repayment) {
-        remainingOne -= repayment.amount;
-      });
-      creditTwo.repayments.forEach((repayment) {
-        remainingTwo -= repayment.amount;
-      });
+      double remainingOne = creditOne.repayableAmount() - creditOne.repaymentTotal();
+      double remainingTwo = creditTwo.repayableAmount() - creditTwo.repaymentTotal();
+      // creditOne.repayments.forEach((repayment) {
+      //   remainingOne -= repayment.amount;
+      // });
+      // creditTwo.repayments.forEach((repayment) {
+      //   remainingTwo -= repayment.amount;
+      // });
       return remainingTwo.compareTo(remainingOne);
     });
-    print(activeCredits.first.id);
     _highestRemainingDept = activeCredits.first;
   }
  
@@ -119,7 +118,7 @@ class CreditManagerService with ReactiveServiceMixin{
         resultCredit = credit;
       }
     });
-    _upcomingCreditRepayment = resultCredit;
+    _nextRepayment = resultCredit;
     _nextRepaymentDate = earliestRepaymentDate;
   }
 

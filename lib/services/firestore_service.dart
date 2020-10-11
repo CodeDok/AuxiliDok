@@ -19,9 +19,7 @@ class FirestoreService {
   Future<String> uploadeProfilePicture(
       File profilePicture, String userId) async {
     try {
-      print(profilePicture);
       if(profilePicture == null) profilePicture = File(constant.defaultUserProfilePicture);
-      print(profilePicture);
       var snapshot = await storageRef
           .child(constant.userProfilePictureFolder)
           .child('$userId.jpg')

@@ -1,5 +1,6 @@
 import 'package:auxilidok/app/constants.dart';
 import 'package:auxilidok/ui/credit_manager/overview/cm_overview_view_model.dart';
+import 'package:auxilidok/ui/dumb_widgets/credit_manager/level_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -8,7 +9,7 @@ class CMOverviewView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<CMOverviewViewModel>.reactive(
       viewModelBuilder: () => CMOverviewViewModel(),
-      onModelReady: (model) async => model.init(),
+      onModelReady: (model) => model.init(),
       builder: (context, model, child) => 
       model.isBusy ?
       Center(child: CircularProgressIndicator())
@@ -45,8 +46,8 @@ class CMOverviewView extends StatelessWidget {
                         ),
                         Column(
                           children: [
-                            Text(model.highestRemainingDept.loanedAmount.toString() ?? '0'),
-                            Text(model.highestRemainingDept.name ?? '0'),
+                            Text(model.highestRemainingDept.repayableAmount().toString()),
+                            Text(model.highestRemainingDept.name),
                           ]
                         )
                       ],
@@ -90,30 +91,7 @@ class CMOverviewView extends StatelessWidget {
                           Text(model.nextRepaymentDebtors)
                         ],
                       ),
-                      Container(
-                        height: 60,
-                        width: 60,
-                        child: Stack(
-                          children: <Widget>[
-                            Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey, width: 1.0),
-                                color: Color.fromRGBO(220, 220, 220, 1),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            FractionallySizedBox(
-                              heightFactor: model.nextRepaymentFulfillmentFraction,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.yellow,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      LevelIndicator(fraction: model.nextRepaymentFulfillmentFraction, size: 60),
                     ],
                   ),
                 ),
@@ -131,3 +109,4 @@ class CMOverviewView extends StatelessWidget {
     );
   }
 }
+
