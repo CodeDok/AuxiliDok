@@ -6,10 +6,9 @@ import 'welcome_menu_view_model.dart';
 class WelcomeMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    MediaQueryData mediaQuery = MediaQuery.of(context);
     return ViewModelBuilder<WelcomeMenuViewModel>.reactive(
       viewModelBuilder: () => WelcomeMenuViewModel(),
-      builder: (context, model, child) => model.isBusy == true ?
+      builder: (context, model, child) => model.isBusy ?
       Center(
         child: CircularProgressIndicator()
       )

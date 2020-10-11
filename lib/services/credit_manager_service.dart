@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:observable_ish/observable_ish.dart';
 import 'package:stacked/stacked.dart';
 
@@ -29,10 +28,9 @@ class CreditManagerService with ReactiveServiceMixin{
   set creditList(List<Credit> credits) {_creditList = credits;}
   set setInitialization(bool init) {_isInitialized = init;}
 
-  CreditManagerService._create();
 
-  static Future<CreditManagerService> initStream() async {
-    CreditManagerService cm = CreditManagerService._create();
+  Future<CreditManagerService> initStream() async {
+    CreditManagerService cm = CreditManagerService();
      locator<FirestoreService>().listenToCredits(locator<AuthenticationService>().currentUser.id).listen((_) {}).onData((credits) {
       cm.creditList.clear();
       cm.creditList.addAll(credits);
@@ -40,6 +38,7 @@ class CreditManagerService with ReactiveServiceMixin{
         cm._calculateTotalOutstandingBalance();
         cm._getHighestDept();
         cm._getUpcommingCreditRepayments();
+        cm.setInitialization = true;
       }
       cm.notifyListeners();
     });
@@ -98,6 +97,7 @@ class CreditManagerService with ReactiveServiceMixin{
       });
       return remainingTwo.compareTo(remainingOne);
     });
+    print(activeCredits.first.id);
     _highestRemainingDept = activeCredits.first;
   }
  

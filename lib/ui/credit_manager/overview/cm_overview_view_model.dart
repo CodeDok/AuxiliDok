@@ -1,4 +1,3 @@
-
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 
@@ -71,7 +70,7 @@ class CMOverviewViewModel extends ReactiveViewModel {
 
   void init(){
     setBusy(true);
-    if(_creditManagerService.creditList != null && _creditManagerService.creditList.isNotEmpty) {
+    if(_creditManagerService.creditList != null && _creditManagerService.creditList.isNotEmpty && _creditManagerService.isInitialized) {
       _creditList = _creditManagerService.creditList; 
       notifyListeners();
     }

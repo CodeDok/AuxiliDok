@@ -6,7 +6,6 @@ import 'package:stacked/stacked.dart';
 class CMOverviewView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var mediaQuery = MediaQuery.of(context);
     return ViewModelBuilder<CMOverviewViewModel>.reactive(
       viewModelBuilder: () => CMOverviewViewModel(),
       onModelReady: (model) async => model.init(),
@@ -46,8 +45,8 @@ class CMOverviewView extends StatelessWidget {
                         ),
                         Column(
                           children: [
-                            Text(model.highestRemainingDept.loanedAmount.toString()),
-                            Text(model.highestRemainingDept.name),
+                            Text(model.highestRemainingDept.loanedAmount.toString() ?? '0'),
+                            Text(model.highestRemainingDept.name ?? '0'),
                           ]
                         )
                       ],

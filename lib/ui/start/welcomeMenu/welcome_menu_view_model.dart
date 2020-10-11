@@ -1,6 +1,5 @@
 import 'package:auxilidok/app/constants.dart' as constants;
 import 'package:auxilidok/services/authentication_service.dart';
-import 'package:auxilidok/services/credit_manager_service.dart';
 import 'package:auxilidok/services/navigation_service.dart';
 import 'package:stacked/stacked.dart';
 
