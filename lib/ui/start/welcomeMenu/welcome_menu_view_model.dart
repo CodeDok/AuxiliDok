@@ -1,5 +1,6 @@
 import 'package:auxilidok/app/constants.dart' as constants;
 import 'package:auxilidok/services/authentication_service.dart';
+import 'package:auxilidok/services/credit_manager_service.dart';
 import 'package:auxilidok/services/navigation_service.dart';
 import 'package:stacked/stacked.dart';
 
@@ -11,7 +12,7 @@ class WelcomeMenuViewModel extends BaseViewModel {
   NavigationService _navigationService = locator<NavigationService>();
 
   Future<void> navigateToCM() async{
-    await runBusyFuture(locator.isReady(instanceName: 'CreditManager').then((value) {
+    await runBusyFuture(locator.isReady<CreditManagerService>().then((value) {
       _navigationService.navigateToNamed(constants.cmHome);
     }));
      

@@ -7,9 +7,7 @@ import 'services/navigation_service.dart';
 import 'ui/authentication/startUp/start_up_view.dart';
 
 void main() {
-  // Register all the models and services before the app starts
   setupLocator();
-
   runApp(MyApp());
 }
 

@@ -28,6 +28,7 @@ class CreditManagerService with ReactiveServiceMixin{
   set creditList(List<Credit> credits) {_creditList = credits;}
   set setInitialization(bool init) {_isInitialized = init;}
 
+  
 
   Future<CreditManagerService> initStream() async {
     locator<FirestoreService>().listenToCredits(locator<AuthenticationService>().currentUser.id).listen((credits) {
@@ -38,10 +39,11 @@ class CreditManagerService with ReactiveServiceMixin{
         _getHighestDept();
         _getUpcommingCreditRepayments();
         setInitialization = true;
+        notifyListeners();
       }
-      notifyListeners();
     });
-    return this;
+    await Future.delayed(Duration(seconds: 1));
+    return this;  
   }
 
   Future<void> addCredit({
@@ -89,12 +91,6 @@ class CreditManagerService with ReactiveServiceMixin{
     activeCredits.sort((creditOne, creditTwo) {
       double remainingOne = creditOne.repayableAmount() - creditOne.repaymentTotal();
       double remainingTwo = creditTwo.repayableAmount() - creditTwo.repaymentTotal();
-      // creditOne.repayments.forEach((repayment) {
-      //   remainingOne -= repayment.amount;
-      // });
-      // creditTwo.repayments.forEach((repayment) {
-      //   remainingTwo -= repayment.amount;
-      // });
       return remainingTwo.compareTo(remainingOne);
     });
     _highestRemainingDept = activeCredits.first;

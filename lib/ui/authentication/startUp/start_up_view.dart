@@ -7,7 +7,6 @@ class StartUpView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<StreamStartUpViewModel>.reactive(
       viewModelBuilder: () => StreamStartUpViewModel(),
-      // fireOnModelReadyOnce: true,
       builder: (context, model, child) => SafeArea(
         child: Scaffold(
           body: Center(

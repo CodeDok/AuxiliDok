@@ -4,7 +4,7 @@ import 'package:auxilidok/services/credit_manager_service.dart';
 import 'package:stacked/stacked.dart';
 
 class ArchiveViewModel extends ReactiveViewModel{
-  CreditManagerService _creditManagerService = locator.get(instanceName: 'CreditManager');
+  CreditManagerService _creditManagerService = locator.get<CreditManagerService>();
 
   @override
   List<ReactiveServiceMixin> get reactiveServices => [_creditManagerService];

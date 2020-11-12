@@ -11,7 +11,7 @@ import '../../../services/authentication_service.dart';
 import '../../../services/credit_manager_service.dart';
 
 class CMOverviewViewModel extends ReactiveViewModel {
-  final CreditManagerService _creditManagerService = locator.get(instanceName: 'CreditManager');
+  final CreditManagerService _creditManagerService = locator.get<CreditManagerService>();
   final AuthenticationService _authenticationService = locator<AuthenticationService>();
 
   @override
@@ -59,6 +59,7 @@ class CMOverviewViewModel extends ReactiveViewModel {
   User get getUser => _authenticationService.currentUser;
 
   CMOverviewViewModel() {
+    print('build');
     _creditManagerService.addListener(init);
   }
 
