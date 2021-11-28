@@ -1,6 +1,6 @@
 # AuxiliDok
 
-A new Flutter project.
+Freetime Project. Paused because not enough time.
 
 ## Getting Started
 
